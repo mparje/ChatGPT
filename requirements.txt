@@ -3,3 +3,4 @@ streamlit
 openai
 PyPDF2==3.0.0
 uuid
+streamlit-session-state
