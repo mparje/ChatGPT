@@ -1,6 +1,5 @@
 pandas
 uuid
-streamlit
 openai
 PyPDF2
 streamlit-session-state
