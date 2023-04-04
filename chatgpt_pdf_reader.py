@@ -55,11 +55,15 @@ def handle_file_upload():
                 if st.button(question):
                     answer = generate_answer(question, text)
                     st.write(answer)
+                    rating = st.selectbox("Califica la respuesta del 1 al 5:", [1, 2, 3, 4, 5])
+                    st.write(f"Has calificado la respuesta con un {rating}.")
 
             custom_question = st.text_input("O ingresa tu propia pregunta:")
             if st.button("Enviar pregunta personalizada"):
                 answer = generate_answer(custom_question, text)
                 st.write(answer)
+                rating = st.selectbox("Califica la respuesta del 1 al 5:", [1, 2, 3, 4, 5])
+                st.write(f"Has calificado la respuesta con un {rating}.")
         else:
             st.error("El archivo supera el límite de tamaño permitido de 2 MB. Por favor, sube un archivo más pequeño.")
 
