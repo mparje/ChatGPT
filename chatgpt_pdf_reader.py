@@ -2,13 +2,14 @@ import PyPDF2
 import openai
 import streamlit as st
 
-# Prompt the user for their API key
-api_key = st.text_input("Enter your OpenAI API key:")
+# Solicitar al usuario su clave de API
+st.title("Generador de respuestas con ChatGPT")
+api_key = st.text_input("Ingresa tu clave de API de OpenAI:", type="password")
 
-# Set up the OpenAI API with the provided API key
+# Configurar la API de OpenAI con la clave de API proporcionada
 openai.api_key = api_key
 
-# Define a function to extract text from a PDF file
+# Definir una función para extraer texto de un archivo PDF
 def extract_text_from_pdf(file):
     pdf_reader = PyPDF2.PdfReader(file)
     num_pages = len(pdf_reader.pages)
@@ -18,7 +19,7 @@ def extract_text_from_pdf(file):
         text += page.extract_text()
     return text
 
-# Define a function to generate answers to user questions using the ChatGPT API
+# Definir una función para generar respuestas a preguntas de usuario utilizando la API de ChatGPT
 def generate_answer(question, text):
     max_context_length = 4096 - len(question) - 30
     truncated_text = text[:max_context_length]
@@ -35,18 +36,17 @@ def generate_answer(question, text):
     answer = response.choices[0].text.strip()
     return answer
 
-# Define a function to handle the file upload and answer generation
+# Definir una función para manejar la carga de archivos y la generación de respuestas
 def handle_file_upload():
-    file = st.file_uploader("Upload a PDF file", type=["pdf"])
+    file = st.file_uploader("Sube un archivo PDF", type=["pdf"])
     if file is not None:
         text = extract_text_from_pdf(file)
-        #answered = True  # Set to True initially to prevent first question box from showing 
-        question = st.text_input("Enter a question:")
-        if st.button("Submit"):
+        question = st.text_input("Ingresa una pregunta:")
+        if st.button("Enviar"):
             answer = generate_answer(question, text)
             st.write(answer)
 
-# Define a main function to run the program
+# Definir una función principal para ejecutar el programa
 def main():
     handle_file_upload()
 
