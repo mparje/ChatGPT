@@ -74,7 +74,7 @@ def handle_file_upload():
 
             if st.button("Mostrar puntuación total"):
                 if question_count > 0:
-                                        total_score_percentage = (total_score / (question_count * 5)) * 100
+                    total_score_percentage = (total_score / (question_count * 5)) * 100
                     st.write(f"Tu puntuación total es {total_score} de {question_count * 5} puntos, lo que equivale a {total_score_percentage:.2f}%.")
                 else:
                     st.write("No has calificado ninguna respuesta. Por favor, haz algunas preguntas y califica las respuestas para ver la puntuación total.")
