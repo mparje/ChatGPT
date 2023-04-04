@@ -69,7 +69,7 @@ def handle_file_upload():
                     if question not in session_state.ratings:
                         session_state.ratings[question] = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5])
                     else:
-                        session_state.ratings[question] = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta ‘{question}’:“, [1, 2, 3, 4, 5], index=(session_state.ratings[question] - 1))
+                        session_state.ratings[question] = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5], index=(session_state.ratings[question] - 1))
 st.write(f"Has calificado la respuesta con un {session_state.ratings[question]}.”)
 
         custom_question = st.text_input("O ingresa tu propia pregunta:")
