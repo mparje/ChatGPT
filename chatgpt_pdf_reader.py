@@ -41,9 +41,23 @@ def handle_file_upload():
     file = st.file_uploader("Sube un archivo PDF", type=["pdf"])
     if file is not None:
         text = extract_text_from_pdf(file)
-        question = st.text_input("Ingresa una pregunta:")
-        if st.button("Enviar"):
-            answer = generate_answer(question, text)
+        st.write("Preguntas sugeridas:")
+        suggested_questions = [
+            "¿Cuál es la tesis del autor?",
+            "¿En qué razones se basa el autor para defender su tesis?",
+            "¿Qué objeciones a su tesis toma en cuenta el autor?",
+            "¿Cómo replica el autor a las objeciones presentadas?",
+            "¿Qué consecuencias derivadas de la aceptación de su tesis plantea el autor?",
+        ]
+
+        for question in suggested_questions:
+            if st.button(question):
+                answer = generate_answer(question, text)
+                st.write(answer)
+
+        custom_question = st.text_input("O ingresa tu propia pregunta:")
+        if st.button("Enviar pregunta personalizada"):
+            answer = generate_answer(custom_question, text)
             st.write(answer)
 
 # Definir una función principal para ejecutar el programa
