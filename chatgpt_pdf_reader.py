@@ -101,4 +101,4 @@ def main():
 handle_file_upload()
 
 if name == “main”:
-main()
+main() 
