@@ -1,7 +1,7 @@
 import PyPDF2
 import openai
 import streamlit as st
-import streamlit-session-state as session-state
+import streamlit-session-state as session_state
 
 # Solicitar al usuario su clave de API
 st.title("Generador de respuestas con ChatGPT")
