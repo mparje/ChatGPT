@@ -1,4 +1,4 @@
-pandas
+streamlit
 uuid
 openai
 PyPDF2
