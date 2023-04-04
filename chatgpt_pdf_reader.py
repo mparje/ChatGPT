@@ -51,11 +51,16 @@ def handle_file_upload():
                 "¿Qué consecuencias derivadas de la aceptación de su tesis plantea el autor?",
             ]
 
+            total_score = 0
+            question_count = 0
+
             for question in suggested_questions:
                 if st.button(question):
                     answer = generate_answer(question, text)
                     st.write(answer)
-                    rating = st.selectbox("Califica la respuesta del 1 al 5:", [1, 2, 3, 4, 5])
+                    rating = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5])
+                    total_score += rating
+                    question_count += 1
                     st.write(f"Has calificado la respuesta con un {rating}.")
 
             custom_question = st.text_input("O ingresa tu propia pregunta:")
@@ -63,7 +68,16 @@ def handle_file_upload():
                 answer = generate_answer(custom_question, text)
                 st.write(answer)
                 rating = st.selectbox("Califica la respuesta del 1 al 5:", [1, 2, 3, 4, 5])
+                total_score += rating
+                question_count += 1
                 st.write(f"Has calificado la respuesta con un {rating}.")
+
+            if st.button("Mostrar puntuación total"):
+                if question_count > 0:
+                                        total_score_percentage = (total_score / (question_count * 5)) * 100
+                    st.write(f"Tu puntuación total es {total_score} de {question_count * 5} puntos, lo que equivale a {total_score_percentage:.2f}%.")
+                else:
+                    st.write("No has calificado ninguna respuesta. Por favor, haz algunas preguntas y califica las respuestas para ver la puntuación total.")
         else:
             st.error("El archivo supera el límite de tamaño permitido de 2 MB. Por favor, sube un archivo más pequeño.")
 
