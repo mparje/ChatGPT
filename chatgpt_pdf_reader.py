@@ -70,7 +70,7 @@ def handle_file_upload():
                         session_state.ratings[question] = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5])
                     else:
                         session_state.ratings[question] = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5], index=(session_state.ratings[question] - 1))
-st.write(f"Has calificado la respuesta con un {session_state.ratings[question]}.”)
+st.write(f"Has calificado la respuesta con un {session_state.ratings[question]}.")
 
         custom_question = st.text_input("O ingresa tu propia pregunta:")
         if st.button("Enviar pregunta personalizada"):
@@ -100,5 +100,5 @@ Definir una función principal para ejecutar el programa
 def main():
 handle_file_upload()
 
-if name == “main”:
+if name == "main":
 main() 
