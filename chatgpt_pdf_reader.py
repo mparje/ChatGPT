@@ -43,6 +43,7 @@ def handle_file_upload():
         if file.size <= 2 * 1024 * 1024:
             text = extract_text_from_pdf(file)
             st.write("Preguntas sugeridas:")
+
             suggested_questions = [
                 "¿Cuál es la tesis del autor?",
                 "¿En qué razones se basa el autor para defender su tesis?",
@@ -51,28 +52,38 @@ def handle_file_upload():
                 "¿Qué consecuencias derivadas de la aceptación de su tesis plantea el autor?",
             ]
 
-            total_score = 0
-            question_count = 0
+            ratings = {question: None for question in suggested_questions}
+            custom_question_rating = None
 
             for question in suggested_questions:
                 if st.button(question):
                     answer = generate_answer(question, text)
                     st.write(answer)
-                    rating = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5])
-                    total_score += rating
-                    question_count += 1
+                    if ratings[question] is None:
+                        rating = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5])
+                        ratings[question] = rating
+                    else:
+                        rating = st.selectbox(f"Califica la respuesta del 1 al 5 para la pregunta '{question}':", [1, 2, 3, 4, 5], index=(ratings[question] - 1))
+                        ratings[question] = rating
                     st.write(f"Has calificado la respuesta con un {rating}.")
 
             custom_question = st.text_input("O ingresa tu propia pregunta:")
             if st.button("Enviar pregunta personalizada"):
                 answer = generate_answer(custom_question, text)
                 st.write(answer)
-                rating = st.selectbox("Califica la respuesta del 1 al 5:", [1, 2, 3, 4, 5])
-                total_score += rating
-                question_count += 1
-                st.write(f"Has calificado la respuesta con un {rating}.")
+                if custom_question_rating is None:
+                    custom_question_rating =                    st.selectbox("Califica la respuesta del 1 al 5:", [1, 2, 3, 4, 5])
+                else:
+                    custom_question_rating = st.selectbox("Califica la respuesta del 1 al 5:", [1, 2, 3, 4, 5], index=(custom_question_rating - 1))
+                st.write(f"Has calificado la respuesta con un {custom_question_rating}.")
 
             if st.button("Mostrar puntuación total"):
+                total_score = sum(rating for rating in ratings.values() if rating is not None)
+                question_count = len([rating for rating in ratings.values() if rating is not None])
+                if custom_question_rating is not None:
+                    total_score += custom_question_rating
+                    question_count += 1
+
                 if question_count > 0:
                     total_score_percentage = (total_score / (question_count * 5)) * 100
                     st.write(f"Tu puntuación total es {total_score} de {question_count * 5} puntos, lo que equivale a {total_score_percentage:.2f}%.")
