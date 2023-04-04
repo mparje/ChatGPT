@@ -3,4 +3,4 @@ uuid
 streamlit
 openai
 PyPDF2
-streamlit-session-state
+streamlit_session_state
