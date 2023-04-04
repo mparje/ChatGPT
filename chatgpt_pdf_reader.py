@@ -38,27 +38,30 @@ def generate_answer(question, text):
 
 # Definir una función para manejar la carga de archivos y la generación de respuestas
 def handle_file_upload():
-    file = st.file_uploader("Sube un archivo PDF", type=["pdf"])
+    file = st.file_uploader("Sube un archivo PDF (máximo 2 MB)", type=["pdf"], accept_multiple_files=False)
     if file is not None:
-        text = extract_text_from_pdf(file)
-        st.write("Preguntas sugeridas:")
-        suggested_questions = [
-            "¿Cuál es la tesis del autor?",
-            "¿En qué razones se basa el autor para defender su tesis?",
-            "¿Qué objeciones a su tesis toma en cuenta el autor?",
-            "¿Cómo replica el autor a las objeciones presentadas?",
-            "¿Qué consecuencias derivadas de la aceptación de su tesis plantea el autor?",
-        ]
+        if file.size <= 2 * 1024 * 1024:
+            text = extract_text_from_pdf(file)
+            st.write("Preguntas sugeridas:")
+            suggested_questions = [
+                "¿Cuál es la tesis del autor?",
+                "¿En qué razones se basa el autor para defender su tesis?",
+                "¿Qué objeciones a su tesis toma en cuenta el autor?",
+                "¿Cómo replica el autor a las objeciones presentadas?",
+                "¿Qué consecuencias derivadas de la aceptación de su tesis plantea el autor?",
+            ]
 
-        for question in suggested_questions:
-            if st.button(question):
-                answer = generate_answer(question, text)
+            for question in suggested_questions:
+                if st.button(question):
+                    answer = generate_answer(question, text)
+                    st.write(answer)
+
+            custom_question = st.text_input("O ingresa tu propia pregunta:")
+            if st.button("Enviar pregunta personalizada"):
+                answer = generate_answer(custom_question, text)
                 st.write(answer)
-
-        custom_question = st.text_input("O ingresa tu propia pregunta:")
-        if st.button("Enviar pregunta personalizada"):
-            answer = generate_answer(custom_question, text)
-            st.write(answer)
+        else:
+            st.error("El archivo supera el límite de tamaño permitido de 2 MB. Por favor, sube un archivo más pequeño.")
 
 # Definir una función principal para ejecutar el programa
 def main():
