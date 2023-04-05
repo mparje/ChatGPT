@@ -7,7 +7,7 @@ import pandas as pd
 st.title("Evaluador de ensayos argumentativos")
 
 # Prompt the user for their API key
-api_key = st.text_input("Ingrese su clave API de OpenAI:")
+api_key = st.text_input("Ingrese su clave API de OpenAI:" type: "password")
 
 # Set up the OpenAI API with the provided API key
 openai.api_key = api_key
@@ -67,6 +67,6 @@ def handle_file_upload():
 
 # Define a main function to run the program
 def main():
-    handle_file_upload()
 
 if __name__ == "__main__":
+    handle_file_upload()
