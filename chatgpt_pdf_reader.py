@@ -3,7 +3,13 @@ import io
 import pdfplumber
 import openai
 
-openai.api_key = "tu_clave_api_aqui"
+# Crear una columna izquierda en la interfaz de Streamlit
+left_column = st.sidebar
+
+# Añadir un título y una casilla de entrada para la clave API de OpenAI en la columna izquierda
+left_column.title("Evaluador de Calidad Argumentativa")
+api_key = left_column.text_input("Ingrese su clave API de OpenAI:", type="password")
+openai.api_key = api_key
 
 def extract_text_from_pdf(pdf_file):
     with pdfplumber.open(pdf_file) as pdf:
