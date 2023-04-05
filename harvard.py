@@ -22,6 +22,16 @@ def extract_text_from_pdf(file):
         text += page.extract_text()
     return text
 
+def parse_evaluation(evaluation_text):
+    try:
+        evaluation_list = evaluation_text.split("\n")
+        criteria = [item.split(":")[0] for item in evaluation_list[:-1]]
+        scores = [round(float(item.split(":")[1].strip().split("/")[0])) for item in evaluation_list[:-1]]
+        total = round(sum(scores) * (100 / (10 * len(scores))))
+        return criteria, scores, total
+    except IndexError:
+        return None, None, None
+
 # Define a function to evaluate the quality of the argumentation using GPT
 def evaluar_argumentacion(texto):
     criterios_harvard = """
@@ -54,16 +64,16 @@ def handle_file_upload():
         text = extract_text_from_pdf(file)
         if st.button("Evaluar argumentación"):
             evaluacion = evaluar_argumentacion(text)
-            evaluacion_lista = evaluacion.split("\n")
-            criterios = [item.split(":")[0] for item in evaluacion_lista[:-1]]
-            calificaciones = [round(float(item.split(":")[1].strip().split("/")[0])) for item in evaluacion_lista[:-1]]
-            total = round(sum(calificaciones) * (100 / (10 * len(calificaciones))))
+            criterios, calificaciones, total = parse_evaluation(evaluacion)
 
-            data = {"Criterio": criterios, "Calificación": calificaciones}
-            df = pd.DataFrame(data)
-            df.loc[len(df.index)] = ["Total", total]
+            if criterios is not None and calificaciones is not None and total is not None:
+                data = {"Criterio": criterios,"Calificación": calificaciones}
+                df = pd.DataFrame(data)
+                df.loc[len(df.index)] = ["Total", total]
 
-            st.table(df)
+                st.table(df)
+            else:
+                st.error("Hubo un error al procesar las calificaciones. Por favor, intente de nuevo.")
 
 # Define a main function to run the program
 def main():
