@@ -1,8 +1,9 @@
+import PyPDF2
 import openai
 import streamlit as st
 
 # Prompt the user for their API key
-api_key = st.text_input("Enter your OpenAI API key:")
+api_key = st.text_input("Ingrese su clave API de OpenAI:")
 
 # Set up the OpenAI API with the provided API key
 openai.api_key = api_key
@@ -17,33 +18,39 @@ def extract_text_from_pdf(file):
         text += page.extract_text()
     return text
 
-# Define a function to generate answers to user questions using the ChatGPT API
-def generate_answer(question, text):
-    max_context_length = 4096 - len(question) - 30
-    truncated_text = text[:max_context_length]
+# Define a function to evaluate the quality of the argumentation using GPT
+def evaluar_argumentacion(texto):
+    criterios_harvard = """
+    Criterios de la Universidad de Harvard para evaluar la calidad de la argumentación:
+    1. Claridad en la declaración del tema o pregunta.
+    2. Uso de razones y evidencia apropiadas para respaldar las afirmaciones.
+    3. Organización lógica y coherente.
+    4. Consideración de puntos de vista alternativos y contraargumentos.
+    5. Precisión y exactitud en el uso de términos y conceptos.
+    6. Estilo y presentación adecuados, incluida la gramática, la ortografía y la puntuación.
+    """
 
-    prompt = f"{truncated_text}\n\nQuestion: {question}\nAnswer:"
+    prompt = f"Evaluar la calidad de la argumentación en el siguiente texto basándose en los criterios de la Universidad de Harvard:\n\n{criterios_harvard}\nTexto:\n{texto}\n\nEvaluación:"
+    
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="text-davinci-002",
         prompt=prompt,
         max_tokens=1024,
         n=1,
         stop=None,
         temperature=0.7,
     )
-    answer = response.choices[0].text.strip()
-    return answer
+    evaluacion = response.choices[0].text.strip()
+    return evaluacion
 
-# Define a function to handle the file upload and answer generation
+# Define a function to handle the file upload and evaluation
 def handle_file_upload():
-    file = st.file_uploader("Upload a PDF file", type=["pdf"])
+    file = st.file_uploader("Suba un archivo PDF", type=["pdf"])
     if file is not None:
         text = extract_text_from_pdf(file)
-        #answered = True  # Set to True initially to prevent first question box from showing 
-        question = st.text_input("Enter a question:")
-        if st.button("Submit"):
-            answer = generate_answer(question, text)
-            st.write(answer)
+        if st.button("Evaluar argumentación"):
+            evaluacion = evaluar_argumentacion(text)
+            st.write(evaluacion)
 
 # Define a main function to run the program
 def main():
