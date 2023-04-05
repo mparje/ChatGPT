@@ -1,12 +1,12 @@
 import streamlit as st
 import io
-from pdf_reader import PdfReader
+import pdfplumber  # Cambio aquí
 
 def extract_text_from_pdf(pdf_file):
-    pdf_reader = PdfReader(pdf_file)
-    text = ""
-    for page in pdf_reader.pages:
-        text += page.extract_text()
+    with pdfplumber.open(pdf_file) as pdf:  # Cambio aquí
+        text = ""
+        for page in pdf.pages:
+            text += page.extract_text()
     return text
 
 def generate_answer(question, text):
