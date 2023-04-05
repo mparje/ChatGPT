@@ -2,3 +2,4 @@ streamlit
 Pdfplumber
 openai
 PyPDF2
+pandas
