@@ -1,6 +1,8 @@
+import os
 import PyPDF2
 import openai
 import streamlit as st
+import pandas as pd
 
 st.title("Evaluador de ensayos argumentativos")
 
@@ -52,11 +54,19 @@ def handle_file_upload():
         text = extract_text_from_pdf(file)
         if st.button("Evaluar argumentación"):
             evaluacion = evaluar_argumentacion(text)
-            st.write(evaluacion)
+            evaluacion_lista = evaluacion.split("\n")
+            criterios = [item.split(":")[0] for item in evaluacion_lista[:-1]]
+            calificaciones = [float(item.split(":")[1].strip()) for item in evaluacion_lista[:-1]]
+            total = float(evaluacion_lista[-1].split(":")[1].strip())
+
+            data = {"Criterio": criterios, "Calificación": calificaciones}
+            df = pd.DataFrame(data)
+            df.loc[len(df.index)] = ["Total", total]
+
+            st.table(df)
 
 # Define a main function to run the program
 def main():
     handle_file_upload()
 
 if __name__ == "__main__":
-    main()
