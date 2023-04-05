@@ -56,8 +56,8 @@ def handle_file_upload():
             evaluacion = evaluar_argumentacion(text)
             evaluacion_lista = evaluacion.split("\n")
             criterios = [item.split(":")[0] for item in evaluacion_lista[:-1]]
-            calificaciones = [float(item.split(":")[1].strip()) for item in evaluacion_lista[:-1]]
-            total = float(evaluacion_lista[-1].split(":")[1].strip())
+            calificaciones = [float(item.split(":")[1].strip().split("/")[0]) for item in evaluacion_lista[:-1]]
+            total = float(evaluacion_lista[-1].split(":")[1].strip().split("/")[0])
 
             data = {"Criterio": criterios, "Calificación": calificaciones}
             df = pd.DataFrame(data)
