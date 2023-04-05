@@ -5,8 +5,16 @@ import openai
 
 left_column = st.sidebar
 
-left_column.title("Evaluador de Problemas Matemáticos")
-api_key = left_column.text_input("Ingrese su clave API de OpenAI:", type="password")
+
+st.title("Evaluador de Problemas Matemáticos")
+api_key = st.secrets.get("openai_api_key")
+
+if not api_key:
+    api_key = st.text_input("Ingrese su clave API de OpenAI:", type="password")
+    if not api_key:
+        st.warning("Por favor, ingrese una clave API de OpenAI para continuar.")
+        st.stop()
+
 openai.api_key = api_key
 
 def extract_text_from_pdf(pdf_file):
@@ -29,14 +37,17 @@ def generate_feedback(problem, solution):
     return response.choices[0].text.strip()
 
 def handle_file_upload():
-    st.title("Evaluación de problemas matemáticos con GPT-3")
-
     problem = st.text_input("Ingrese el problema matemático:")
-    solution = st.text_input("Ingrese la solución propuesta:")
 
-    if st.button("Calificar solución"):
-        feedback = generate_feedback(problem, solution)
-        st.write(feedback)
+    uploaded_file = st.file_uploader("Sube un archivo PDF con la solución propuesta (máximo 2 MB)", type=["pdf"])
+    if uploaded_file is not None:
+        if uploaded_file.size <= 2 * 1024 * 1024:
+            solution = extract_text_from_pdf(io.BytesIO(uploaded_file.read()))
+            if st.button("Calificar solución"):
+                feedback = generate_feedback(problem, solution)
+                st.write(feedback)
+        else:
+            st.error("El archivo supera el límite de tamaño permitido de 2 MB. Por favor, sube un archivo más pequeño.")
 
 if __name__ == "__main__":
     handle_file_upload()
