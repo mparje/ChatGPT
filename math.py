@@ -33,6 +33,8 @@ def generate_feedback(problem, solution):
 
 def handle_file_upload():
     problem = st.text_input("Ingrese el problema matemático:")
+    
+    st.title("Evaluador de Problemas de Matemáticas")
 
     uploaded_file = st.file_uploader("Sube un archivo PDF con la solución propuesta (máximo 2 MB)", type=["pdf"])
     if uploaded_file is not None:
