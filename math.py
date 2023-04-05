@@ -2,7 +2,7 @@ import streamlit as st
 import io
 import re
 import openai
-from pdfminer.high_level import extract_text
+import fitz
 
 # Crear una columna izquierda en la interfaz de Streamlit
 left_column = st.sidebar
@@ -13,7 +13,11 @@ api_key = left_column.text_input("Ingrese su clave API de OpenAI:", type="passwo
 openai.api_key = api_key
 
 def extract_text_from_pdf(pdf_file):
-    return extract_text(pdf_file)
+    doc = fitz.open("pdf", pdf_file)
+    text = ""
+    for page in doc:
+        text += page.get_text()
+    return text
 
 def is_math_solution(text):
     math_regex = r"[\d+\-*/^()]+"
@@ -31,25 +35,21 @@ def generate_feedback(problem, solution):
     )
     return response.choices[0].text.strip()
 
-st.title("Evaluador de Problemas de Matemáticas")
-
 def handle_file_upload():
     problem = st.text_input("Ingrese el problema matemático:")
     
+    st.title("Evaluador de Problemas de Matemáticas")
+
     uploaded_file = st.file_uploader("Sube un archivo PDF con la solución propuesta (máximo 2 MB)", type=["pdf"])
     if uploaded_file is not None:
         if uploaded_file.size <= 2 * 1024 * 1024:
-            solution = extract_text_from_pdf(io.BytesIO(uploaded_file.read()))
-
-            if solution.strip():
-                if is_math_solution(solution):
-                    if st.button("Calificar solución"):
-                        feedback = generate_feedback(problem, solution)
-                        st.write(feedback)
-                else:
-                    st.warning("El PDF subido no contiene ninguna respuesta a un problema matemático. Por favor, sube un archivo con una solución.")
+            solution = extract_text_from_pdf(uploaded_file.read())
+            if is_math_solution(solution):
+                if st.button("Calificar solución"):
+                    feedback = generate_feedback(problem, solution)
+                    st.write(feedback)
             else:
-                st.warning("El PDF subido no contiene texto. Por favor, sube un archivo con una solución.")
+                st.error("El archivo subido no contiene ninguna solución a un problema matemático.")
         else:
             st.error("El archivo supera el límite de tamaño permitido de 2 MB. Por favor, sube un archivo más pequeño.")
 
