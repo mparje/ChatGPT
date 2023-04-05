@@ -1,3 +1,4 @@
 streamlit
 Pdfplumber
 openai
+pdfminer.six
