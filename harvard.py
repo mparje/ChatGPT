@@ -2,13 +2,13 @@ import PyPDF2
 import openai
 import streamlit as st
 
+st.title("Evaluador de ensayos argumentativos")
+
 # Prompt the user for their API key
 api_key = st.text_input("Ingrese su clave API de OpenAI:")
 
 # Set up the OpenAI API with the provided API key
 openai.api_key = api_key
-
-st.title("Evaluador de ensayos argumentativos")
 
 # Define a function to extract text from a PDF file
 def extract_text_from_pdf(file):
