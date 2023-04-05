@@ -23,7 +23,7 @@ def generate_answer(question, text):
         engine="text-davinci-003",
         prompt=f"Text: {text}\nQuestion: {question}\nAnswer:",
         temperature=0.5,
-        max_tokens=100,
+        max_tokens=250,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
