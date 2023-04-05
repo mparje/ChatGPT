@@ -1,8 +1,8 @@
 import streamlit as st
 import io
-import pdfplumber
-import openai
 import re
+import openai
+from pdfminer.high_level import extract_text
 
 # Crear una columna izquierda en la interfaz de Streamlit
 left_column = st.sidebar
@@ -13,11 +13,7 @@ api_key = left_column.text_input("Ingrese su clave API de OpenAI:", type="passwo
 openai.api_key = api_key
 
 def extract_text_from_pdf(pdf_file):
-    with pdfplumber.open(pdf_file) as pdf:
-        text = ""
-        for page in pdf.pages:
-            text += page.extract_text()
-    return text
+    return extract_text(pdf_file)
 
 def is_math_solution(text):
     math_regex = r"[\d+\-*/^()]+"
@@ -39,7 +35,7 @@ st.title("Evaluador de Problemas de Matemáticas")
 
 def handle_file_upload():
     problem = st.text_input("Ingrese el problema matemático:")
-
+    
     uploaded_file = st.file_uploader("Sube un archivo PDF con la solución propuesta (máximo 2 MB)", type=["pdf"])
     if uploaded_file is not None:
         if uploaded_file.size <= 2 * 1024 * 1024:
