@@ -1,16 +1,28 @@
 import streamlit as st
 import io
-import pdfplumber  # Cambio aquí
+import pdfplumber
+import openai
+
+openai.api_key = "tu_clave_api_aqui"
 
 def extract_text_from_pdf(pdf_file):
-    with pdfplumber.open(pdf_file) as pdf:  # Cambio aquí
+    with pdfplumber.open(pdf_file) as pdf:
         text = ""
         for page in pdf.pages:
             text += page.extract_text()
     return text
 
 def generate_answer(question, text):
-    return f"Esta es una respuesta de ejemplo para la pregunta '{question}'."
+    response = openai.Completion.create(
+        engine="davinci-codex",
+        prompt=f"Texto: {text}\nPregunta: {question}\nRespuesta:",
+        temperature=0.5,
+        max_tokens=100,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    return response.choices[0].text.strip()
 
 def handle_file_upload():
     if "answer" not in st.session_state:
