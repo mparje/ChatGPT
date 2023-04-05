@@ -68,5 +68,5 @@ def handle_file_upload():
 # Define a main function to run the program
 def main():
 
-if __name__ == "__main__":
-    handle_file_upload()
+    if __name__ == "__main__":
+        handle_file_upload()
