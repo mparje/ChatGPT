@@ -33,7 +33,9 @@ def generate_answer(question, text):
 def handle_file_upload():
     if "answer" not in st.session_state:
         st.session_state["answer"] = {}
-
+    
+    st.title("Análisis de PDF con GPT-3")
+    
     file = st.file_uploader("Sube un archivo PDF (máximo 2 MB)", type=["pdf"], accept_multiple_files=False)
     if file is not None:
         if file.size <= 2 * 1024 * 1024:
