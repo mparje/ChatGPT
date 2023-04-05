@@ -30,10 +30,10 @@ def evaluar_argumentacion(texto):
     6. Estilo y presentación adecuados, incluida la gramática, la ortografía y la puntuación.
     """
 
-    prompt = f"Evaluar la calidad de la argumentación en el siguiente texto basándose en los criterios de la Universidad de Harvard:\n\n{criterios_harvard}\nTexto:\n{texto}\n\nEvaluación:"
+    prompt = f"Evaluar la calidad de la argumentación en el siguiente texto basándose en los criterios de la Universidad de Harvard. Proporcionar una calificación de 1 a 10 para cada criterio y una calificación total sobre 100:\n\n{criterios_harvard}\nTexto:\n{texto}\n\nEvaluación:"
     
     response = openai.Completion.create(
-        engine="text-davinci-002",
+        engine="text-davinci-003",
         prompt=prompt,
         max_tokens=1024,
         n=1,
