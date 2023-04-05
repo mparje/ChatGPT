@@ -3,19 +3,14 @@ import io
 import pdfplumber
 import openai
 
+# Crear una columna izquierda en la interfaz de Streamlit
 left_column = st.sidebar
 
-
-st.title("Evaluador de Problemas Matemáticos")
-api_key = st.secrets.get("openai_api_key")
-
-if not api_key:
-    api_key = st.text_input("Ingrese su clave API de OpenAI:", type="password")
-    if not api_key:
-        st.warning("Por favor, ingrese una clave API de OpenAI para continuar.")
-        st.stop()
-
+# Añadir un título y una casilla de entrada para la clave API de OpenAI en la columna izquierda
+left_column.title("Evaluador de Problemas de Matemáticas")
+api_key = left_column.text_input("Ingrese su clave API de OpenAI:", type="password")
 openai.api_key = api_key
+
 
 def extract_text_from_pdf(pdf_file):
     with pdfplumber.open(pdf_file) as pdf:
