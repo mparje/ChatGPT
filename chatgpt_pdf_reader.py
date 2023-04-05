@@ -2,19 +2,6 @@ import streamlit as st
 import PyPDF2
 import io
 
-# Para mantener el estado de la sesión en Streamlit
-class _SessionState:
-    def __init__(self, **kwargs):
-        for key, val in kwargs.items():
-            setattr(self, key, val)
-
-def get_session_state(**kwargs):
-    session_id = str(hash(st.session_state))
-    session_states = st.session_state.setdefault("session_states", {})
-    if session_id not in session_states:
-        session_states[session_id] = _SessionState(**kwargs)
-    return session_states[session_id]
-
 def extract_text_from_pdf(pdf_file):
     pdf_reader = PyPDF2.PdfFileReader(pdf_file)
     text = ""
@@ -26,8 +13,9 @@ def generate_answer(question, text):
     return f"Esta es una respuesta de ejemplo para la pregunta '{question}'."
 
 def handle_file_upload():
-    session_state = get_session_state(answer={})
-    
+    if "answer" not in st.session_state:
+        st.session_state["answer"] = {}
+
     file = st.file_uploader("Sube un archivo PDF (máximo 2 MB)", type=["pdf"], accept_multiple_files=False)
     if file is not None:
         if file.size <= 2 * 1024 * 1024:
@@ -44,10 +32,10 @@ def handle_file_upload():
 
             for question in suggested_questions:
                 if st.button(question):
-                    if question not in session_state.answer:
-                        session_state.answer[question] = generate_answer(question, text)
+                    if question not in st.session_state.answer:
+                        st.session_state.answer[question] = generate_answer(question, text)
 
-                    st.write(session_state.answer[question])
+                    st.write(st.session_state.answer[question])
 
             custom_question = st.text_input("O ingresa tu propia pregunta:")
             if st.button("Enviar pregunta personalizada"):
