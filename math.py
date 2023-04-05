@@ -1,57 +1,69 @@
 import streamlit as st
-import io
-import re
 import openai
-import fitz
+import math
 
 # Crear una columna izquierda en la interfaz de Streamlit
 left_column = st.sidebar
 
 # Añadir un título y una casilla de entrada para la clave API de OpenAI en la columna izquierda
-left_column.title("Evaluador de Problemas de Matemáticas")
+left_column.title("Evaluador de Trabajos")
 api_key = left_column.text_input("Ingrese su clave API de OpenAI:", type="password")
 openai.api_key = api_key
 
-def extract_text_from_pdf(pdf_file):
-    doc = fitz.open("pdf", pdf_file)
-    text = ""
-    for page in doc:
-        text += page.get_text()
-    return text
+# Configura tus claves de API de OpenAI aquí
+openai.api_key = "tu_clave_api"
 
-def is_math_solution(text):
-    math_regex = r"[\d+\-*/^()]+"
-    return re.search(math_regex, text)
+# Función para calificar ensayos
+def calificar_ensayo(ensayo, ponderaciones, criterios):
+    prompt = f"Calificar el siguiente ensayo basado en los siguientes criterios:\n\nEnsayo:\n{ensayo}\n\nCriterios:\n"
 
-def generate_feedback(problem, solution):
+    for i, criterio in enumerate(criterios):
+        prompt += f"{i + 1}. {criterio}: Ponderación {ponderaciones[i]}%\n"
+
+    prompt += "\nPor favor, proporciona una calificación justificada para cada criterio y una calificación total."
+
     response = openai.Completion.create(
         engine="text-davinci-003",
-        prompt=f"Problema: {problem}\nSolución propuesta: {solution}\nRetroalimentación:",
+        prompt=prompt,
+        max_tokens=150,
+        n=1,
+        stop=None,
         temperature=0.5,
-        max_tokens=100,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
     )
+
     return response.choices[0].text.strip()
 
-def handle_file_upload():
-    problem = st.text_input("Ingrese el problema matemático:")
-    
-    st.title("Evaluador de Problemas de Matemáticas")
+# Criterios de calificación
+criterios = [
+    "Contenido",
+    "Comprensión",
+    "Precisión",
+    "Creatividad",
+    "Organización",
+    "Presentación",
+    "Coherencia",
+    "Habilidad técnica",
+    "Investigación",
+    "Participación",
+]
 
-    uploaded_file = st.file_uploader("Sube un archivo PDF con la solución propuesta (máximo 2 MB)", type=["pdf"])
-    if uploaded_file is not None:
-        if uploaded_file.size <= 2 * 1024 * 1024:
-            solution = extract_text_from_pdf(uploaded_file.read())
-            if is_math_solution(solution):
-                if st.button("Calificar solución"):
-                    feedback = generate_feedback(problem, solution)
-                    st.write(feedback)
-            else:
-                st.error("El archivo subido no contiene ninguna solución a un problema matemático.")
-        else:
-            st.error("El archivo supera el límite de tamaño permitido de 2 MB. Por favor, sube un archivo más pequeño.")
+st.title("Calificador de ensayos con GPT-4")
+st.write("Por favor, ingrese el ensayo y ajuste las ponderaciones de los criterios de calificación.")
 
-if __name__ == "__main__":
-    handle_file_upload()
+ensayo = st.text_area("Ensayo (min. 500 palabras):", max_chars=None)
+
+ponderaciones = []
+for criterio in criterios:
+    ponderacion = st.slider(criterio, 0, 100, 10)
+    ponderaciones.append(ponderacion)
+
+if sum(ponderaciones) != 100:
+    st.warning("La suma de las ponderaciones debe ser igual a 100.")
+else:
+    if len(ensayo.split()) < 500:
+        st.warning("El ensayo debe tener al menos 500 palabras.")
+    else:
+        if st.button("Calificar ensayo"):
+            st.write("Calificando el ensayo, por favor espere...")
+            calificacion = calificar_ensayo(ensayo, ponderaciones, criterios)
+            st.write(calificacion)
