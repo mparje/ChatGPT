@@ -7,7 +7,7 @@ import pandas as pd
 st.title("Evaluador de ensayos argumentativos")
 
 # Prompt the user for their API key
-api_key = st.text_input("Ingrese su clave API de OpenAI:" type: "password")
+api_key = st.text_input("Ingrese su clave API de OpenAI:", type: "password")
 
 # Set up the OpenAI API with the provided API key
 openai.api_key = api_key
