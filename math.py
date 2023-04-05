@@ -31,8 +31,7 @@ def generate_feedback(problem, solution):
     )
     return response.choices[0].text.strip()
 
-    st.title("Evaluador de Problemas de Matemáticas")
-
+st.title("Evaluador de Problemas de Matemáticas")
 
 def handle_file_upload():
     problem = st.text_input("Ingrese el problema matemático:")
