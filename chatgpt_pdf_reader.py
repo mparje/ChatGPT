@@ -1,12 +1,12 @@
 import streamlit as st
-import PyPDF2
 import io
+from pdf_reader import PdfReader
 
 def extract_text_from_pdf(pdf_file):
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+    pdf_reader = PdfReader(pdf_file)
     text = ""
-    for page_num in range(pdf_reader.numPages):
-        text += pdf_reader.getPage(page_num).extractText()
+    for page in pdf_reader.pages:
+        text += page.extract_text()
     return text
 
 def generate_answer(question, text):
