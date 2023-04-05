@@ -20,7 +20,7 @@ def extract_text_from_pdf(pdf_file):
 
 def generate_answer(question, text):
     response = openai.Completion.create(
-        engine="davinci-codex",
+        engine="text-davinci-003",
         prompt=f"Texto: {text}\nPregunta: {question}\nRespuesta:",
         temperature=0.5,
         max_tokens=100,
