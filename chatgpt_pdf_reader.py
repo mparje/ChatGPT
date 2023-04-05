@@ -1,6 +1,6 @@
 import streamlit as st
 import io
-from pdfreader import PdfReader
+from PdfReader import PdfReader
 
 def extract_text_from_pdf(pdf_file):
     pdf_reader = PdfReader(pdf_file)
