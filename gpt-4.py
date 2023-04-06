@@ -146,7 +146,7 @@ def handle_file_upload():
         return
     
     openai.api_key = api_key
-
+    
     left_column.header("Instructions")
     left_column.write("This tool uses the GPT-4 model from OpenAI to answer questions based on uploaded documents. The documents can be in PDF or Docx format and should not exceed 4000 words or approximately 8 pages. The documents will be deleted from the server after 10 minutes of inactivity.")
     left_column.write("Note: You must have an API key corresponding to an account authorized to use GPT-4.")
@@ -163,7 +163,7 @@ def handle_file_upload():
                 st.warning("The document exceeds the maximum word count (4000 words). Please upload a smaller document.")
                 return
 
-            custom_question = st.text_input("Enter your question:")
+            custom_question = st.text_input("Enter your question:", key="custom_question_key")
             if st.button("Submit question"):
                 answer = generate_response(custom_question, text)
                 st.write(answer)
