@@ -30,7 +30,7 @@ def generate_response(prompt, text=None):
             {"role": "user", "content": prompt}
         ]
 
-    completion = openai.chat.Completion.create(
+    completion = openai.chatCompletion.create(
         engine="gpt-4",
         prompt=prompt,
         max_tokens=250,
