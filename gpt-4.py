@@ -78,12 +78,12 @@ def generate_response(prompt, text=None):
     model=model,
     messages=st.session_state['messages']
 )
-response = completion.choices[0].message.content
-st.session_state['messages'].append({"role": "assistant", "content": response})
+    response = completion.choices[0].message.content
+    st.session_state['messages'].append({"role": "assistant", "content": response})
 
-total_tokens = completion.usage.total_tokens
-prompt_tokens = completion.usage.prompt_tokens
-completion_tokens = completion.usage.completion_tokens
+    total_tokens = completion.usage.total_tokens
+    prompt_tokens = completion.usage.prompt_tokens
+    completion_tokens = completion.usage.completion_tokens
     return response, total_tokens, prompt_tokens, completion_tokens
 
 def extract_text_from_pdf(pdf_file):
