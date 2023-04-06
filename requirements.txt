@@ -4,3 +4,4 @@ openai
 PyPDF2
 pandas
 streamlit_chat
+python-docx
