@@ -67,6 +67,7 @@ def handle_file_upload():
     left_column.write("This tool uses the GPT-4 model from OpenAI to answer questions based on uploaded documents. The documents can be in PDF or Docx format and should not exceed 4000 words or approximately 8 pages. The documents will be deleted from the server after 10 minutes of inactivity.")
     left_column.write("Note: You must have an API key corresponding to an account authorized to use GPT-4.")
     
+  
     file = st.file_uploader("Upload a PDF or Docx file (max 2 MB)", type=["pdf", "docx"], accept_multiple_files=False)
     if file is not None:
         if file.size <= 2 * 1024 * 1024:
@@ -74,9 +75,20 @@ def handle_file_upload():
                 text = extract_text_from_pdf(io.BytesIO(file.read()))
             elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
                 text = extract_text_from_docx(io.BytesIO(file.read()))
-            
+
             if len(text.split()) > 4000:
                 st.warning("The document exceeds the maximum word count (4000 words). Please upload a smaller document.")
-               
+                return
+
+            with st.form(key="question_form"):
+                custom_question = st.text_input("Enter your question:")
+                submit_button = st.form_submit_button("Submit question")
+
+            if submit_button:
+                answer = generate_response(custom_question, text)
+                st.write(answer)
+        else:
+            st.warning("The file size exceeds the maximum limit. Please upload a smaller file.")
+
 if __name__ == "__main__":
     handle_file_upload()
