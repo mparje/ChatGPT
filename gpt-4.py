@@ -27,7 +27,7 @@ while(True):
 
     response = openai.ChatCompletion.create(
         engine="gpt-4" # The deployment name you chose when you deployed the ChatGPT or GPT-4 model.
-messages = conversation
+            messages = conversation
     )
 
     conversation.append({"role": "assistant", "content": response['choices'][0]['message']['content']})
