@@ -79,17 +79,6 @@ def handle_file_upload():
                 st.warning("The document exceeds the maximum word count (4000 words). Please upload a smaller document.")
                 return
 
-            with st.form(key="question_form"):
-                custom_question = st.text_input("Enter your question:")
-                submit_button = st.form_submit_button("Submit question")
-            
-            if submit_button:
-                answer = generate_response(custom_question, text)
-                st.write(answer)
-        else:
-            st.warning("The file size exceeds the maximum word count (4000 words). Please upload a smaller document.")
-                return
-
             custom_question = st.text_input("Enter your question:")
             if st.button("Submit question"):
                 answer = generate_response(custom_question, text)
