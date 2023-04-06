@@ -19,19 +19,17 @@ def extract_text_from_pdf(pdf_file):
     return text
 
 def generate_answer(question, text):
-    conversation=[{"role": "system", "content": "You are a helpful assistant."}]
+response = openai.ChatCompletion.create(
+    engine="gpt-35-turbo", # The deployment name you chose when you deployed the ChatGPT or GPT-4 model.
+    messages=[
+        {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
+        {"role": "user", "content": "What's the difference between garbanzo beans and chickpeas?"},
+    ]
+)
 
-while(True):
-    user_input = input()      
-    conversation.append({"role": "user", "content": user_input})
+print(response)
 
-    response = openai.ChatCompletion.create(
-        engine="gpt-4" # The deployment name you chose when you deployed the ChatGPT or GPT-4 model.
-        messages = conversation
-    )
-
-    conversation.append({"role": "assistant", "content": response['choices'][0]['message']['content']})
-    print("\n" + response['choices'][0]['message']['content'] + "\n")
+print(response['choices'][0]['message']['content'])
 
 def handle_file_upload():
     if "answer" not in st.session_state:
