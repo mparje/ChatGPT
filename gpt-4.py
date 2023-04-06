@@ -53,8 +53,7 @@ def handle_file_upload():
     st.title("Ask my Documents")
     
     left_column = st.sidebar
-    left_column.write("This tool uses the GPT-4 model from OpenAI to answer questions based on uploaded documents. The documents can be in PDF or Docx format and should not exceed 4000 words or approximately 8 pages. The documents will be deleted from the server after 10 minutes of inactivity.")
-    left_column.write("Note: You must have an API key corresponding to an account authorized to use GPT-4.")
+    left_column.title("Settings and Instructions")
     api_key = left_column.text_input("Enter your OpenAI API key:", type="password")
     if api_key == "":
         st.warning("Please enter a valid OpenAI API key.")
@@ -62,6 +61,10 @@ def handle_file_upload():
     
     openai.api_key = api_key
 
+    left_column.header("Instructions")
+    left_column.write("This tool uses the GPT-4 model from OpenAI to answer questions based on uploaded documents. The documents can be in PDF or Docx format and should not exceed 4000 words or approximately 8 pages. The documents will be deleted from the server after 10 minutes of inactivity.")
+    left_column.write("Note: You must have an API key corresponding to an account authorized to use GPT-4.")
+    
     file = st.file_uploader("Upload a PDF or Docx file (max 2 MB)", type=["pdf", "docx"], accept_multiple_files=False)
     if file is not None:
         if file.size <= 2 * 1024 * 1024:
