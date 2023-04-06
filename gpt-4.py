@@ -79,9 +79,8 @@ def generate_response(prompt, text=None):
         messages=messages
     )
     response = completion.choices[0].message.content
-    st.session_state['messages'].append
-        response = completion.choices[0].message.content
-        st.session_state['messages'].append({"role": "assistant", "content": response})
+    st.session_state['messages'].append response = completion.choices[0].message.content
+    st.session_state['messages'].append({"role": "assistant", "content": response})
 
     total_tokens = completion.usage.total_tokens
     prompt_tokens = completion.usage.prompt_tokens
@@ -113,3 +112,4 @@ def handle_file_upload():
 
 if __name__ == "__main__":
     handle_file_upload()
+
