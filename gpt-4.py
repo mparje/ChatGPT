@@ -19,7 +19,7 @@ def extract_text_from_pdf(pdf_file):
     return text
 
 def generate_answer(question, text):
-conversation=[{"role": "system", "content": "You are a helpful assistant."}]
+    conversation=[{"role": "system", "content": "You are a helpful assistant."}]
 
 while(True):
     user_input = input()      
