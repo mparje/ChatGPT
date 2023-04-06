@@ -34,7 +34,13 @@ def generate_response(prompt, text=None):
     response = completion.choices[0].message.content
     return response.strip()
 
-def handle_file_upload():
+def handle_file_upload(api_key):
+    if not api_key:
+        st.warning("Please enter your OpenAI API key in the sidebar.")
+        return
+
+    openai.api_key = api_key
+
     st.title("Ask my Documents")
 
     left_column = st.sidebar
@@ -55,4 +61,5 @@ def handle_file_upload():
                 st.write(answer)
 
 if __name__ == "__main__":
-    handle_file_upload()
+    api_key = st.sidebar.text_input("Enter your OpenAI API key:", type="password")
+    handle_file_upload(api_key)
