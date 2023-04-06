@@ -23,7 +23,7 @@ if 'messages' not in st.session_state:
     ]
 
 # Set the model to GPT-4
-model = "gpt-4-32k"
+model = "gpt-4-32k-0314"
 
 # Generate a response
 def generate_response(prompt, text=None):
