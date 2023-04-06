@@ -19,7 +19,7 @@ def extract_text_from_pdf(pdf_file):
     return text
 
 def generate_answer(question, text):
-    response = openai.com/v1/chat/completions(
+    response = openai/v1/chat/completions(
         engine="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
