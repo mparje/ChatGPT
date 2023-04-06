@@ -3,3 +3,4 @@ Pdfplumber
 openai
 PyPDF2
 pandas
+streamlit_chat
