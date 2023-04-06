@@ -19,13 +19,13 @@ def extract_text_from_pdf(pdf_file):
     return text
 
 def generate_answer(question, text):
-response = openai.ChatCompletion.create(
-    engine="gpt-35-turbo", # The deployment name you chose when you deployed the ChatGPT or GPT-4 model.
-    messages=[
-        {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
-        {"role": "user", "content": "What's the difference between garbanzo beans and chickpeas?"},
-    ]
-)
+    response = openai.ChatCompletion.create(
+        engine="gpt-35-turbo", # The deployment name you chose when you deployed the ChatGPT or GPT-4 model.
+        messages=[
+            {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
+            {"role": "user", "content": "What's the difference between garbanzo beans and chickpeas?"},
+        ]
+    )
 
 print(response)
 
