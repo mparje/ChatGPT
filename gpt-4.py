@@ -20,44 +20,27 @@ def extract_text_from_pdf(pdf_file):
 
 def generate_answer(question, text):
     response = openai.ChatCompletion.create(
-        engine="gpt-35-turbo", # The deployment name you chose when you deployed the ChatGPT or GPT-4 model.
+        engine="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
-            {"role": "user", "content": "What's the difference between garbanzo beans and chickpeas?"},
+            {"role": "user", "content": f"Text: {text}\nQuestion: {question}"}
         ]
     )
-
-print(response['choices'][0]['message']['content'])
+    return response['choices'][0]['message']['content'].strip()
 
 def handle_file_upload():
     if "answer" not in st.session_state:
         st.session_state["answer"] = {}
     
-    st.title("PDF Analysis with GPT-3")
+    st.title("PDF Analysis with GPT-3.5-turbo")
     
     file = st.file_uploader("Upload a PDF file (max 2 MB)", type=["pdf"], accept_multiple_files=False)
     if file is not None:
         if file.size <= 2 * 1024 * 1024:
             text = extract_text_from_pdf(io.BytesIO(file.read()))
-            st.write("Suggested questions:")
 
-            suggested_questions = [
-                "What is the author's thesis?",
-                "On what grounds does the author defend their thesis?",
-                "What objections to their thesis does the author consider?",
-                "How does the author respond to the objections presented?",
-                "What consequences arising from the acceptance of their thesis does the author discuss?",
-            ]
-
-            for question in suggested_questions:
-                if st.button(question):
-                    if question not in st.session_state.answer:
-                        st.session_state.answer[question] = generate_answer(question, text)
-
-                    st.write(st.session_state.answer[question])
-
-            custom_question = st.text_input("Or enter your own question:")
-            if st.button("Submit custom question"):
+            custom_question = st.text_input("Enter your question:")
+            if st.button("Submit question"):
                 answer = generate_answer(custom_question, text)
                 st.write(answer)
 
