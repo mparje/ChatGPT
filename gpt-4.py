@@ -27,8 +27,6 @@ def generate_answer(question, text):
         ]
     )
 
-print(response)
-
 print(response['choices'][0]['message']['content'])
 
 def handle_file_upload():
