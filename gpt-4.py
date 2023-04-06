@@ -29,8 +29,6 @@ def generate_response(prompt):
     response = completion.choices[0].message.content
     st.session_state['messages'].append({"role": "assistant", "content": response})
     
-    ]
-
     completion = openai.chatCompletion.create(
         engine="gpt-4",
         prompt=prompt,
