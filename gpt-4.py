@@ -33,12 +33,12 @@ def generate_response(prompt, text=None):
     completion = openai.Completion.create(
         engine="gpt-4",
         prompt=prompt,
-        max_tokens=150,
+        max_tokens=250,
         n=1,
         stop=None,
         temperature=0.5,
         top_p=1,
-        frequency_penalty=0,
+        frequency_penalty=0.3,
         presence_penalty=0.3,
         echo=False
     )
