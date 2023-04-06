@@ -4,6 +4,9 @@ import pdfplumber
 import io
 from docx import Document
 
+# Configuración del modelo
+model = "gpt-4"
+
 def extract_text_from_pdf(pdf_file):
     with pdfplumber.open(pdf_file) as pdf:
         text = ""
@@ -30,7 +33,7 @@ def generate_response(prompt, text):
     st.session_state['messages'].append({"role": "assistant", "content": response})
     
     completion = openai.chatCompletion.create(
-        engine="gpt-4",
+        engine=model,
         prompt=prompt,
         max_tokens=250,
         n=1,
@@ -74,6 +77,17 @@ def handle_file_upload():
             
             if len(text.split()) > 4000:
                 st.warning("The document exceeds the maximum word count (4000 words). Please upload a smaller document.")
+                return
+
+            with st.form(key="question_form"):
+                custom_question = st.text_input("Enter your question:")
+                submit_button = st.form_submit_button("Submit question")
+            
+            if submit_button:
+                answer = generate_response(custom_question, text)
+                st.write(answer)
+        else:
+            st.warning("The file size exceeds the maximum word count (4000 words). Please upload a smaller document.")
                 return
 
             custom_question = st.text_input("Enter your question:")
