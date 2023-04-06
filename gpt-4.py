@@ -18,17 +18,18 @@ def extract_text_from_docx(docx_file):
         text += paragraph.text + "\n"
     return text
 
-def generate_response(prompt, text=None):
-    if text:
-        messages = [
-            {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
-            {"role": "user", "content": f"Text: {text}\nQuestion: {prompt}"}
-        ]
-    else:
-        messages = [
-            {"role": "system", "content": "Assistant is a large language model trained by OpenAI."},
-            {"role": "user", "content": prompt}
-        ]
+# generate a response
+def generate_response(prompt):
+    st.session_state['messages'].append({"role": "user", "content": prompt})
+
+    completion = openai.ChatCompletion.create(
+        model=model,
+        messages=st.session_state['messages']
+    )
+    response = completion.choices[0].message.content
+    st.session_state['messages'].append({"role": "assistant", "content": response})
+    
+    ]
 
     completion = openai.chatCompletion.create(
         engine="gpt-4",
