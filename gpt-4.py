@@ -4,15 +4,12 @@ from streamlit_chat import message
 import pdfplumber
 import io
 
-# Setting page title and header
-st.set_page_config(page_title="Ask my PDF", page_icon=":robot_face:")
-st.markdown("<h1 style='text-align: center;'>Ask my PDF</h1>", unsafe_allow_html=True)
 
 # Create a left column in the Streamlit interface
 left_column = st.sidebar
 
 # Add a title and an input box for the OpenAI API key in the left column
-left_column.title("Argument Quality Evaluator")
+left_column.title("Ask my PDF")
 api_key = left_column.text_input("Enter your OpenAI API key:", type="password")
 openai.api_key = api_key
 
